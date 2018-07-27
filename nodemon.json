@@ -1,0 +1,7 @@
+{
+    "restartable": "rs", 
+    "ext": "js,ts,html", 
+    "ignore": ["./dist"], 
+    "watch": ["./src"],
+    "exec": "tsc && node ./dist/index.js"
+}
