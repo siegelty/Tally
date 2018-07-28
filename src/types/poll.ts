@@ -14,6 +14,6 @@ export class poll {
     }
 
     vote(person_id: string, decision?: string, undecided?: boolean) {
-
+        //test
     }
 }
