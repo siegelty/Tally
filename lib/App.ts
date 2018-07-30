@@ -14,20 +14,7 @@ class App {
         this.config()
         this.routesPrv.routes(this.app)
         this.mongoSetup();
-        // this.mountRoutes()
     }
-
-    // private mountRoutes (): void {
-    //     const router = express.Router()
-    //     router.get('/', (req, res) => {
-    //         res.json({
-    //             message: 'Hello World!'
-    //         })
-    //     })
-    //     this.app.use('/', router)
-
-    //     this.app.use('/api/v1.0/poll', poll_router)
-    // }
 
     private config(): void {
         // support application/json type post data

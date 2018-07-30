@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import { PollController } from '../controlelrs/crmController'
+import { PollController } from '../controllers/crmController'
 
 export class Routes {
 

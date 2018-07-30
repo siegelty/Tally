@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { PollSchema } from '../model/crmModel';
+import { PollSchema } from '../models/pollModel';
 import { Request, Response } from 'express';
 
 const Poll = mongoose.model('Poll', PollSchema);
