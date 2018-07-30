@@ -1,6 +1,6 @@
 {
   "name": "tally",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A voting app enforcing accountability and anonyminity",
   "main": "index.js",
   "scripts": {
