@@ -23,6 +23,9 @@ export class Routes {
         // Add new user
         app.route('/person/new')
         .post(this.personController.addNewPerson)
+
+        app.route('/poll/vote')
+        .post(this.pollController.vote)
     }
 
 }

@@ -38,4 +38,24 @@ export class PollController {
             res.json(poll);
         })
     }
+
+    public vote(req: Request, res: Response) {
+        const body = req.body;
+
+        if (!body.person || !body.poll) {
+            res.status(400).send({
+                message: "Must have a person who voted and a poll to vote on"
+            })
+            return;
+        }
+
+        Poll.update({_id: body.poll}, 
+            { $pull: {'undecided': body.person} },
+            (err, poll) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.json({message: "Update successful"})
+        })
+    }
 }
