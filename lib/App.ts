@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
-import { poll_router } from './routes/poll'
 import { Routes } from './routes/crmRoutes'
 import * as mongoose from 'mongoose'
 
@@ -25,7 +24,9 @@ class App {
     }
     
     private mongoSetup(): void {
-        mongoose.Promise = global.Promise;
+        // The code here isn't necessary now due to: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/10743
+        // But may need to change otherwise
+        // mongoose.Promise = global.Promise;
         mongoose.connect(this.mongoURL, { useNewUrlParser: true }); 
     }
 }
