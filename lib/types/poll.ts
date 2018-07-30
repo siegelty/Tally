@@ -2,6 +2,7 @@
 import { option } from "./option"
 import { person } from "./person"
 
+// May not need
 export class poll {
     prompt: string;
     options: option[];
