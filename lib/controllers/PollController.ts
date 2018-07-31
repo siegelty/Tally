@@ -90,7 +90,7 @@ function removeFromOptions(body): Promise<any> {
 
     return new Promise(function(resolve, reject) {
         var db = mongoose.connection;
-        db.collections["polls"].update(
+        Poll.update(
             {
                 _id: new ObjectId(body.poll),
                 'options.supporters': new ObjectId(body.person)
