@@ -8,5 +8,5 @@ export const OptionSchema = new Schema({
         type: String,
         requied: "All options must have prompts"
     },
-    supporters: [ PersonSchema ]
+    supporters: [ Schema.Types.ObjectId ]
 })
