@@ -109,6 +109,38 @@ function removeFromOptions(body): Promise<any> {
 }
 
 function tallyVote(body): Promise<any> {
+    if (body.option) {
+        return tallyOption(body)
+    } else {
+        return tallyUndecided(body)
+    }
+}
+
+function tallyOption(body): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        var db = mongoose.connection;
+        db.collections["polls"].update(
+            {
+                _id: new ObjectId(body.poll),
+                'options._id': new ObjectId(body.option)
+
+            },
+            {
+                $push: {"options.$.supporters": new ObjectId(body.person)}
+            },
+            (err, poll) => {
+                if (err) {
+                    console.log(err)
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        )
+    })
+}
+
+function tallyUndecided(body): Promise<any> {
     return new Promise(function(resolve, reject) {
         resolve();
     })
