@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import { PersonSchema } from './personModel';
 import { OptionSchema } from './optionModel';
-import { ObjectId, ObjectID } from '../../node_modules/@types/bson';
 
 const Schema = mongoose.Schema;
 

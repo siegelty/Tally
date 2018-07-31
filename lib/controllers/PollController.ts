@@ -7,6 +7,7 @@ import { PollSchema } from '../models/pollModel';
 const Poll = mongoose.model('Poll', PollSchema);
 const Person = mongoose.model('Person', PersonSchema);
 
+const ObjectId = mongoose.Types.ObjectId;
 export class PollController {
 
     public addNewPoll(req: Request, res: Response) {
@@ -49,13 +50,66 @@ export class PollController {
             return;
         }
 
-        Poll.update({_id: body.poll}, 
+        // Remove from undecided
+        removeFromUndecided(body)
+        .then(function() {
+            // Then remove the person from any options
+            return removeFromOptions(body)
+        })
+        .then(function() {
+            // Tally that person's vote
+            return tallyVote(body);
+        })
+        .then(function() {
+            res.json({message: "Update successful"})
+        })
+        .catch(function(err) {
+            res.send(err);
+        })
+    }
+}
+
+function removeFromUndecided(body): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        Poll.update(
+            {_id: body.poll}, 
             { $pull: {'undecided': body.person} },
             (err, poll) => {
                 if (err) {
-                    res.send(err);
+                    console.log(err)
+                    reject(err);
+                } else {
+                    resolve();
                 }
-                res.json({message: "Update successful"})
-        })
-    }
+            }
+        )
+    })
+}
+
+function removeFromOptions(body): Promise<any> {
+
+    return new Promise(function(resolve, reject) {
+        var db = mongoose.connection;
+        db.collections["polls"].update(
+            {
+                _id: new ObjectId(body.poll),
+                'options.supporters': new ObjectId(body.person)
+            },
+            { $pull: {'options.$.supporters': new ObjectId(body.person) } },
+            (err, poll) => {
+                if (err) {
+                    console.log(err)
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        )
+    })
+}
+
+function tallyVote(body): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        resolve();
+    })
 }
