@@ -61,6 +61,9 @@ export class PollController {
             return tallyVote(body);
         })
         .then(function() {
+            return updatePollState(body);
+        })
+        .then(function() {
             res.json({message: "Update successful"})
         })
         .catch(function(err) {
@@ -155,5 +158,36 @@ function tallyUndecided(body): Promise<any> {
                 }
             }
         )
+    })
+}
+
+function updatePollState(body): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        Poll.findOne({_id: new ObjectId(body.poll)}, (err, poll) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            if (!poll || poll == null) {
+                reject("Poll not found!");
+                return;
+            }
+
+            console.log(poll);
+
+            const status: String = poll["undecided"].length == 0 ? 'CLOSED' : 'OPEN';
+            Poll.update(
+                {_id: new ObjectId(body.poll)},
+                { 'status': status },
+                (err, poll) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                }
+            )
+        })
     })
 }

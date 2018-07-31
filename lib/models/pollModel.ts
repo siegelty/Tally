@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { PersonSchema } from './personModel';
 import { OptionSchema } from './optionModel';
 
 const Schema = mongoose.Schema;
@@ -23,5 +22,10 @@ export const PollSchema = new Schema({
     created_date: {
         type: Date,
         default: Date.now
+    },
+    status: {
+        type: String,
+        enum: ['OPEN', 'CLOSE'],
+        default: 'OPEN'
     }
 })

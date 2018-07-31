@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { PersonSchema } from './personModel';
 
 const Schema = mongoose.Schema;
 
