@@ -98,7 +98,6 @@ function removeFromOptions(body): Promise<any> {
             { $pull: {'options.$.supporters': new ObjectId(body.person) } },
             (err, poll) => {
                 if (err) {
-                    console.log(err)
                     reject(err);
                 } else {
                     resolve();
@@ -130,7 +129,6 @@ function tallyOption(body): Promise<any> {
             },
             (err, poll) => {
                 if (err) {
-                    console.log(err)
                     reject(err);
                 } else {
                     resolve();
@@ -142,6 +140,20 @@ function tallyOption(body): Promise<any> {
 
 function tallyUndecided(body): Promise<any> {
     return new Promise(function(resolve, reject) {
-        resolve();
+        Poll.update(
+            {
+                _id: new ObjectId(body.poll),
+            },
+            {
+                $push: {"undecided": new ObjectId(body.person)}
+            },
+            (err, poll) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        )
     })
 }
