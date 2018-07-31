@@ -119,7 +119,7 @@ function tallyVote(body): Promise<any> {
 function tallyOption(body): Promise<any> {
     return new Promise(function(resolve, reject) {
         var db = mongoose.connection;
-        db.collections["polls"].update(
+        Poll.update(
             {
                 _id: new ObjectId(body.poll),
                 'options._id': new ObjectId(body.option)
