@@ -4,6 +4,9 @@ import { PersonSchema } from '../models/PersonModel';
 
 const Person = mongoose.model('Person', PersonSchema);
 
+const ObjectId = mongoose.Types.ObjectId;
+
+
 
 // Promise that will resolve returning an array of people
 export function getPeople(): Promise<any> {
@@ -15,6 +18,19 @@ export function getPeople(): Promise<any> {
             }
 
             resolve(people);
+        })
+    })
+}
+
+export function getPerson(person_id): Promise<any> {
+    return new Promise((resolve, reject) => {
+        Person.find({_id: new ObjectId(person_id)}, (err, person) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(person)
         })
     })
 }

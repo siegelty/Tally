@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 
 import { getPeople } from '../operators/PersonOperators';
-import { getPolls, getPoll, preparePollWithResults } from '../operators/PollOperators';
+import { getPolls, getPoll, preparePollWithResults, preparePollWithUnvoted } from '../operators/PollOperators';
 import { removePersonFromUndecided, tallyPersonVote, removePersonFromOptions, updatePollState } from "../operators/VoteOperators";
 import { PollSchema } from '../models/PollModel';
 
@@ -82,6 +82,7 @@ export class PollController {
                 // 1) Send back Poll with results (and status)
                 return preparePollWithResults(poll);
             } else {
+                return preparePollWithUnvoted(poll);
                 // 2) Send back Poll unvoted people (and status)
                     // 2a) Retreive names of unvoted 
             }

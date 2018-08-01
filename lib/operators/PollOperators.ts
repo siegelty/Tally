@@ -1,6 +1,7 @@
 // These are meant to be functionalities used throghout the app
 import * as mongoose from 'mongoose'
 import { PollSchema } from '../models/PollModel';
+import { getPerson } from './PersonOperators';
 
 const Poll = mongoose.model('Poll', PollSchema);
 const ObjectId = mongoose.Types.ObjectId;
@@ -47,5 +48,30 @@ export function preparePollWithResults(poll): Promise<any> {
         }
 
         resolve(derived_poll)
+    })
+}
+
+export function preparePollWithUnvoted(poll): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        const undecidedPromises: Promise<any>[] = poll.undecided.map(person => {
+            return getPerson(person);
+        });
+        
+        // TODO: Resolve if this is still the best way
+        Promise.all(undecidedPromises)
+        .then((undecided) => {
+            console.log(undecided)
+            const derived_poll = {
+                status: poll.status,
+                _id: poll._id,
+                undecided: undecided
+            }
+    
+            resolve(derived_poll)
+        })
+        .catch((err) => {
+            reject(err)
+        })
+        
     })
 }
