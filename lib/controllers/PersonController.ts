@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
 
-import { PersonSchema } from '../models/personModel';
+import { PersonSchema } from '../models/PersonModel';
 
 const Person = mongoose.model('Person', PersonSchema);
 

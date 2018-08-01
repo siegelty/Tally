@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { OptionSchema } from './optionModel';
+import { OptionSchema } from './OptionModel';
 
 const Schema = mongoose.Schema;
 

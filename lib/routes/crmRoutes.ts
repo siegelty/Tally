@@ -1,31 +1,24 @@
-import {Request, Response} from 'express'
-import { PollController } from '../controllers/PollController'
-import { PersonController } from '../controllers/PersonController'
+import { PollRoutes } from "./PollRoutes";
+import * as express from 'express'
 
-export class Routes {
+export interface Router {
+    routes(app: express.Application): void;
+}
 
-    public pollController: PollController = new PollController();
-    public personController: PersonController = new PersonController();
+export class RouteManager {
+    // Might be bad... hmmmm
+    public routers: Router[] = [];
 
-    public routes(app): void {
-        app.route('/')
-        .get((req: Request, res: Response) => {
-            res.status(200).send({
-                message: 'GET request successfulll!!!!'
-            })
-        })
-
-        // Create Poll
-        app.route('/poll')
-        .get(this.pollController.getPolls)
-        .post(this.pollController.addNewPoll)
-
-        // Add new user
-        app.route('/person/new')
-        .post(this.personController.addNewPerson)
-
-        app.route('/poll/vote')
-        .post(this.pollController.pollIsOpen, this.pollController.vote)
+    constructor() {
+        this.routers.push(new PollRoutes());
     }
 
+    // public pollController: PollController = new PollController();
+    // public personController: PersonController = new PersonController();
+
+    public routes(app: express.Application): void {
+        this.routers.forEach(router => {
+            router.routes(app);
+        });
+    }
 }

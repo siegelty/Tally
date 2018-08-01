@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
 
-import { PersonSchema } from '../models/personModel';
-import { PollSchema } from '../models/pollModel';
+import { PersonSchema } from '../models/PersonModel';
+import { PollSchema } from '../models/PollModel';
 
 const Poll = mongoose.model('Poll', PollSchema);
 const Person = mongoose.model('Person', PersonSchema);
