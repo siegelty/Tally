@@ -1,14 +1,13 @@
-import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
+import * as mongoose from 'mongoose';
 
-import { PersonSchema } from '../models/PersonModel';
-import { PollSchema } from '../models/PollModel';
 import { getPeople } from '../operators/PersonOperators';
+import { getPolls, getPoll } from '../operators/PollOperators';
+import { removePersonFromUndecided, tallyPersonVote, removePersonFromOptions, updatePollState } from "../operators/VoteOperators";
+import { PollSchema } from '../models/PollModel';
 
 const Poll = mongoose.model('Poll', PollSchema);
-const Person = mongoose.model('Person', PersonSchema);
 
-const ObjectId = mongoose.Types.ObjectId;
 export class PollController {
 
     public addNewPoll(req: Request, res: Response) {
@@ -31,12 +30,12 @@ export class PollController {
 
     // TODO: Change this to a utility promise and create a one for routes
     public getPolls(req: Request, res: Response) {
-        Poll.find({}, (err, poll) => {
-            if (err) {
-                res.send(err);
-            }
-
-            res.json(poll);
+        getPolls()
+        .then((polls) => {
+            res.json(polls);
+        })
+        .catch((err) => {
+            res.send(err);
         })
     }
 
@@ -51,14 +50,14 @@ export class PollController {
         }
 
         // Remove from undecided
-        removeFromUndecided(body)
+        removePersonFromUndecided(body)
         .then(function() {
             // Then remove the person from any options
-            return removeFromOptions(body)
+            return removePersonFromOptions(body)
         })
         .then(function() {
             // Tally that person's vote
-            return tallyVote(body);
+            return tallyPersonVote(body);
         })
         .then(function() {
             return updatePollState(body);
@@ -71,7 +70,7 @@ export class PollController {
         })
     }
 
-    // Middle ware
+    // Middle ware to check poll is open
     public pollIsOpen(req: Request, res: Response, next) {
         const body = req.body;
 
@@ -95,135 +94,3 @@ export class PollController {
     }
 }
 
-function removeFromUndecided(body): Promise<any> {
-    return new Promise(function(resolve, reject) {
-        Poll.update(
-            {_id: body.poll}, 
-            { $pull: {'undecided': body.person} },
-            (err, poll) => {
-                if (err) {
-                    console.log(err)
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            }
-        )
-    })
-}
-
-function removeFromOptions(body): Promise<any> {
-
-    return new Promise(function(resolve, reject) {
-        var db = mongoose.connection;
-        Poll.update(
-            {
-                _id: new ObjectId(body.poll),
-                'options.supporters': new ObjectId(body.person)
-            },
-            { $pull: {'options.$.supporters': new ObjectId(body.person) } },
-            (err, poll) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            }
-        )
-    })
-}
-
-function tallyVote(body): Promise<any> {
-    if (body.option) {
-        return tallyOption(body)
-    } else {
-        return tallyUndecided(body)
-    }
-}
-
-function tallyOption(body): Promise<any> {
-    return new Promise(function(resolve, reject) {
-        var db = mongoose.connection;
-        Poll.update(
-            {
-                _id: new ObjectId(body.poll),
-                'options._id': new ObjectId(body.option)
-
-            },
-            {
-                $push: {"options.$.supporters": new ObjectId(body.person)}
-            },
-            (err, poll) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            }
-        )
-    })
-}
-
-function tallyUndecided(body): Promise<any> {
-    return new Promise(function(resolve, reject) {
-        Poll.update(
-            {
-                _id: new ObjectId(body.poll),
-            },
-            {
-                $push: {"undecided": new ObjectId(body.person)}
-            },
-            (err, poll) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            }
-        )
-    })
-}
-
-function updatePollState(body): Promise<any> {
-    return new Promise(function(resolve, reject) {
-        Poll.findOne({_id: new ObjectId(body.poll)}, (err, poll) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            if (!poll || poll == null) {
-                reject("Poll not found!");
-                return;
-            }
-
-            console.log(poll);
-
-            const status: String = poll["undecided"].length == 0 ? 'CLOSED' : 'OPEN';
-            Poll.update(
-                {_id: new ObjectId(body.poll)},
-                { 'status': status },
-                (err, poll) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }
-            )
-        })
-    })
-}
-
-function getPoll(poll: string) {
-    return new Promise(function(resolve, reject) {
-        Poll.findOne({_id: new ObjectId(poll)}, (err, poll) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            resolve(poll);
-        })
-    })
-}

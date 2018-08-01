@@ -4,9 +4,10 @@ import { PersonSchema } from '../models/PersonModel';
 
 const Person = mongoose.model('Person', PersonSchema);
 
+
 // Promise that will resolve returning an array of people
 export function getPeople(): Promise<any> {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         Person.find({}, (err, people) => {
             if (err) {
                 reject(err);

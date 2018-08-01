@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
+import * as mongoose from 'mongoose';
 
 import { PersonSchema } from '../models/PersonModel';
 import { getPeople } from '../operators/PersonOperators';
