@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 
 import { PersonSchema } from '../models/PersonModel';
 import { PollSchema } from '../models/PollModel';
+import { getPeople } from '../operators/PersonOperators';
 
 const Poll = mongoose.model('Poll', PollSchema);
 const Person = mongoose.model('Person', PersonSchema);
@@ -11,22 +12,20 @@ const ObjectId = mongoose.Types.ObjectId;
 export class PollController {
 
     public addNewPoll(req: Request, res: Response) {
-        Person.find({}, (err, people) => {
-            if (err) {
-                res.send(err)
-            }
-
+        getPeople()
+        .then((people) => {
             let full_doc = req.body;
             full_doc.undecided = people.map(person => {return person._id});
 
             let newPoll = new Poll(full_doc);
 
-            newPoll.save((err, poll) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.json(poll);
-            })
+            return newPoll.save();
+        })
+        .then((poll) => {
+            res.json(poll);
+        })
+        .catch((err) => {
+            res.send(err);
         })
     }
 
