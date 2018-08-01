@@ -30,6 +30,7 @@ export class PollController {
         })
     }
 
+    // TODO: Change this to a utility promise and create a one for routes
     public getPolls(req: Request, res: Response) {
         Poll.find({}, (err, poll) => {
             if (err) {
@@ -68,6 +69,29 @@ export class PollController {
         })
         .catch(function(err) {
             res.send(err);
+        })
+    }
+
+    // Middle ware
+    public pollIsOpen(req: Request, res: Response, next) {
+        const body = req.body;
+
+        if (!body.poll) {
+            res.status(400).send("No Poll Specified");
+            return;
+        }
+
+        getPoll(body.poll)
+        .then(function(poll) {
+            if (poll['status'] == 'OPEN') {
+                next();
+            } else {
+                res.status(400).send("Poll is closed")
+                return;
+            }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
         })
     }
 }
@@ -188,6 +212,19 @@ function updatePollState(body): Promise<any> {
                     }
                 }
             )
+        })
+    })
+}
+
+function getPoll(poll: string) {
+    return new Promise(function(resolve, reject) {
+        Poll.findOne({_id: new ObjectId(poll)}, (err, poll) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(poll);
         })
     })
 }

@@ -25,7 +25,7 @@ export class Routes {
         .post(this.personController.addNewPerson)
 
         app.route('/poll/vote')
-        .post(this.pollController.vote)
+        .post(this.pollController.pollIsOpen, this.pollController.vote)
     }
 
 }
