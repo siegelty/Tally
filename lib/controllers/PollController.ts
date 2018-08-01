@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 
 import { getPeople } from '../operators/PersonOperators';
-import { getPolls, getPoll } from '../operators/PollOperators';
+import { getPolls, getPoll, preparePollWithResults } from '../operators/PollOperators';
 import { removePersonFromUndecided, tallyPersonVote, removePersonFromOptions, updatePollState } from "../operators/VoteOperators";
 import { PollSchema } from '../models/PollModel';
 
@@ -40,7 +40,7 @@ export class PollController {
     }
 
     public vote(req: Request, res: Response) {
-        const body = req.body;
+        let body = {...req.body, ...{poll: req.query.poll}};
 
         if (!body.person || !body.poll) {
             res.status(400).send({
@@ -70,9 +70,33 @@ export class PollController {
         })
     }
 
+    public getPollStatus(req: Request, res: Response) {
+        const body = {...req.body, ...{poll: req.query.poll}};
+        console.log(body)
+
+        // Get Poll
+        getPoll(body.poll)
+        // Figure out to 1) display results or 2) unvoted
+        .then((poll) => {
+            if (poll['status'] == 'CLOSED') {
+                // 1) Send back Poll with results (and status)
+                return preparePollWithResults(poll);
+            } else {
+                // 2) Send back Poll unvoted people (and status)
+                    // 2a) Retreive names of unvoted 
+            }
+        })
+        .then((poll) => {
+            res.json(poll);
+        })
+        .catch((err) => {
+            res.send(err);
+        })
+    }
+
     // Middle ware to check poll is open
     public pollIsOpen(req: Request, res: Response, next) {
-        const body = req.body;
+        const body = {...req.body, ...{poll: req.query.poll}};
 
         if (!body.poll) {
             res.status(400).send("No Poll Specified");
