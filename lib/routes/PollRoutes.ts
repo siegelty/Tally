@@ -1,7 +1,7 @@
 import { Request, Response, Application } from "express";
 import { PollController } from "../controllers/PollController";
 import { PersonController } from "../controllers/PersonController";
-import { Router, RouteManager } from "./crmRoutes";
+import { Router } from "./Router";
 
 
 export class PollRoutes implements Router {

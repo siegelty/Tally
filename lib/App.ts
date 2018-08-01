@@ -1,17 +1,17 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
-import { RouteManager } from './routes/crmRoutes'
+import { RouteManager } from './routes/RouteManager'
 import * as mongoose from 'mongoose'
 
 class App {
     public app: express.Application;
-    public routesPrv: RouteManager = new RouteManager();
+    public routeManager: RouteManager = new RouteManager();
     public mongoURL: string = 'mongodb://localhost:27017/CRMdb'
 
     constructor() {
         this.app = express()
         this.config()
-        this.routesPrv.routes(this.app)
+        this.routeManager.routes(this.app)
         this.mongoSetup();
     }
 
