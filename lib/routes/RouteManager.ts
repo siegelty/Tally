@@ -1,15 +1,18 @@
 import { PollRoutes } from "./PollRoutes";
-import { Router } from "./Router";
+import { Routes } from "./Routes";
 import * as express from 'express'
+import { PersonRoutes } from "./PersonRoutes";
 
 export class RouteManager {
     // Might be bad... hmmmm
-    public routers: Router[] = [];
+    public routers: Routes[] = [];
 
     // Routers being used
     // Poll Router
+    // Person Router
     constructor() {
         this.routers.push(new PollRoutes());
+        this.routers.push(new PersonRoutes());
     }
 
     public routes(app: express.Application): void {

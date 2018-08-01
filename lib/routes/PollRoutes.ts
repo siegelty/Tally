@@ -1,12 +1,10 @@
 import { Request, Response, Application } from "express";
+import { Routes } from "./Routes";
+
 import { PollController } from "../controllers/PollController";
-import { PersonController } from "../controllers/PersonController";
-import { Router } from "./Router";
 
-
-export class PollRoutes implements Router {
+export class PollRoutes implements Routes {
     public pollController: PollController = new PollController();
-    public personController: PersonController = new PersonController();
 
     public routes(app: Application): void {
         app.route('/')
@@ -17,13 +15,11 @@ export class PollRoutes implements Router {
         })
 
         // Create Poll
-        app.route('/poll')
+        app.route('/polls')
         .get(this.pollController.getPolls)
-        .post(this.pollController.addNewPoll)
 
-        // Add new user
-        app.route('/person/new')
-        .post(this.personController.addNewPerson)
+        app.route('/polls/new')
+        .post(this.pollController.addNewPoll)
 
         app.route('/poll/vote')
         .post(this.pollController.pollIsOpen, this.pollController.vote)

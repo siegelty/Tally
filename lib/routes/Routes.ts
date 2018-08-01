@@ -1,5 +1,6 @@
 import { Application } from "express";
 
-export interface Router {
+// TODO: Rename me
+export interface Routes {
     routes(app: Application): void;
 }
