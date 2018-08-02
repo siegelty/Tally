@@ -2,6 +2,7 @@ import * as expect from 'expect';
 import * as request from 'supertest';
 import * as mongoose from 'mongoose';
 import { ObjectId } from "mongodb";
+// import * as log from 'why-is-node-running'
 
 import app from "../App";
 
@@ -59,3 +60,7 @@ describe('GET /people', () => {
             .end(done)
     })
 })
+
+// setTimeout(function () {
+//     log() // logs out active handles that are keeping node running
+//   }, 1000)

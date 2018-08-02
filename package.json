@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node ./lib/index.ts",
-    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha -r ts-node/register lib/**/*.test.ts",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha --exit -r ts-node/register lib/**/*.test.ts",
     "test-watch": "nodemon --exec npm run test",
     "start": "nodemon",
     "prod": "npm run build && npm run start"
@@ -36,6 +36,7 @@
     "supertest": "3.0.0",
     "ts-node": "^7.0.0",
     "typescript": "2.3.3",
-    "typescript-eslint-parser": "3.0.0"
+    "typescript-eslint-parser": "3.0.0",
+    "why-is-node-running": "^2.0.2"
   }
 }
