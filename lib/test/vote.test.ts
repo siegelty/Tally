@@ -139,9 +139,9 @@ describe('POST /polls/vote', () => {
                     expect(db_poll['status']).toBe(poll_statuses.OPEN)
 
                     // Comes from fresh poll and therefore should have one less undecided person
-                    expect(db_poll['undecided'].length).toBe(1);
-                    expect(db_poll['options'][0]['supporters'].length).toBe(0);
-                    expect(db_poll['options'][1]['supporters'].length).toBe(1);
+                    expect(db_poll['undecided'].length).toBe(halfway_poll.undecided.length);
+                    expect(db_poll['options'][0]['supporters'].length).toBe(halfway_poll.options[0].supporters.length - 1);
+                    expect(db_poll['options'][1]['supporters'].length).toBe(halfway_poll.options[1].supporters.length + 1);
 
                     done();
                 }).catch(err => done(err));
@@ -163,6 +163,37 @@ describe('POST /polls/vote', () => {
             .end(done)
     })
 
+    it('Should submit a vote to undecided when already undecided', (done) => {
+        const vote_package = {
+            person: people[1]._id,
+        }
+        
+        request(app)
+            .post('/poll/vote?poll=' + open_poll_id)
+            .send(vote_package)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.message).toBe("Vote Registered")
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+
+                Poll.findOne({_id: open_poll}).then((db_poll) => {
+                    expect(db_poll['status']).toBe(poll_statuses.OPEN)
+
+                    // Comes from fresh poll and therefore should have one less undecided person
+                    expect(db_poll['undecided'].length).toBe(open_poll.undecided.length);
+
+                    done();
+                }).catch(err => done(err));
+            })
+        
+    })
+})
+
+describe('POST /polls/vote errors', () => {
     it('Should make a malformed vote attempt with wrong poll', (done) => {
         const vote_package = {
             person: people[1]._id,
@@ -206,6 +237,21 @@ describe('POST /polls/vote', () => {
             .expect(400)
             .expect((res) => {
                 expect(res.body.message).toBe("No Poll Specified")
+            })
+            .end(done)
+    })
+
+    it('Should try to vote without specifying a person', (done) => {
+        const vote_package = {
+            option: open_poll.options[0]._id
+        }
+        
+        request(app)
+            .post('/poll/vote?poll=' + open_poll_id)
+            .send(vote_package)
+            .expect(400)
+            .expect((res) => {
+                expect(res.body.message).toBe("No Person Specified")
             })
             .end(done)
     })
