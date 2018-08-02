@@ -11,7 +11,7 @@ export class PersonController {
     public getPeople(req: Request, res: Response) {
         getPeople()
         .then((people) => {
-            res.json(people);
+            res.json({people: people});
         })
         .catch((err) =>{
             res.send(err)
@@ -23,7 +23,7 @@ export class PersonController {
 
         newPerson.save((err, person) => {
             if (err) {
-                res.send(err);
+                res.send(err); 
             }
 
             res.json(person);
