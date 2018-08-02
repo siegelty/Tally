@@ -47,6 +47,23 @@ describe('POST /person/new', () => {
                 }).catch((err) => done(err))
             })
     })
+
+    it('Should fail to create a new person as no name was given', (done) => {
+        request(app)
+            .post('/person/new')
+            .send({})
+            .expect(400)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+
+                Person.find({}).then((people) => {
+                    expect(people.length).toBe(2)
+                    done()
+                }).catch((err) => done(err))
+            })
+    })
 })
 
 describe('GET /people', () => {

@@ -23,7 +23,7 @@ export class PersonController {
 
         newPerson.save((err, person) => {
             if (err) {
-                res.send(err); 
+                res.status(400).send(err); 
             }
 
             res.json(person);
