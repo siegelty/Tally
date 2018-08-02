@@ -8,6 +8,7 @@ import { PollSchema } from '../models/PollModel';
 import { PersonSchema } from '../models/PersonModel';
 import { people } from './person_mock';
 import { open_poll_id, closed_poll_id, closed_poll, halfway_poll_id, halfway_poll, polls } from './poll_mock';
+import { poll_statuses } from '../types/poll_statuses';
 
 
 const Poll = mongoose.model('Poll', PollSchema);
@@ -41,7 +42,7 @@ describe('GET /poll', () => {
             .get('/poll?poll=' + open_poll_id)
             .expect(200)
             .expect((res) => {
-                expect(res.body.poll.status).toBe('OPEN')
+                expect(res.body.poll.status).toBe(poll_statuses.OPEN)
                 expect(res.body.poll.undecided.length).toBe(people.length)
                 expect(res.body.poll.results).toBeUndefined()
 
@@ -58,7 +59,7 @@ describe('GET /poll', () => {
             .expect(200)
             .expect((res) => {
                 // Check basic results
-                expect(res.body.poll.status).toBe('CLOSED')
+                expect(res.body.poll.status).toBe(poll_statuses.CLOSED)
                 expect(res.body.poll.undecided).toBeUndefined()
                 expect(res.body.poll.results.length).toBe(closed_poll.options.length)
 
@@ -77,7 +78,7 @@ describe('GET /poll', () => {
             .expect(200)
             .expect((res) => {
                 // Check basic status
-                expect(res.body.poll.status).toBe('OPEN')
+                expect(res.body.poll.status).toBe(poll_statuses.OPEN)
                 expect(res.body.poll.undecided.length).toBe(halfway_poll.undecided.length)
                 expect(res.body.poll.results).toBeUndefined()
                 
@@ -123,7 +124,7 @@ describe('POST /polls/new', () => {
             })
             .end((err, res) =>  {
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
 
                 Poll.findOne({_id: res.body.poll._id}).then((db_poll) => {
@@ -135,8 +136,3 @@ describe('POST /polls/new', () => {
             })
     })
 })
-
-describe('POST /polls/vote', () => {
-
-})
-

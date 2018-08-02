@@ -22,7 +22,7 @@ export class PollRoutes implements Routes {
         .post(this.pollController.addNewPoll)
 
         app.route('/poll/vote')
-        .post(this.pollController.pollIsOpen, this.pollController.vote)
+        .post(this.pollController.pollIsOpen, this.pollController.validPerson, this.pollController.vote)
 
         app.route('/poll')
         .get(this.pollController.getPollStatus)

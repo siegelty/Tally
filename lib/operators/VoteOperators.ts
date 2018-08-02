@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 
 import { getPoll } from './PollOperators';
 import { PollSchema } from '../models/PollModel';
+import { poll_statuses } from '../types/poll_statuses';
 
 const Poll = mongoose.model('Poll', PollSchema);
 
@@ -108,7 +109,7 @@ export function updatePollState(body): Promise<any> {
                 return;
             }
 
-            const status: String = poll["undecided"].length == 0 ? 'CLOSED' : 'OPEN';
+            const status: String = poll["undecided"].length == 0 ? poll_statuses.CLOSED : poll_statuses.OPEN;
 
             Poll.update(
                 {_id: new ObjectId(body.poll)},
