@@ -7,16 +7,9 @@ import { ObjectId } from "mongodb";
 import app from "../App";
 
 import { PersonSchema } from "../models/PersonModel";
+import { people } from './person_mock';
 
 const Person = mongoose.model('Person', PersonSchema);
-
-const people = [{
-    _id: new ObjectId(),
-    name: "Sam Darnold"
-}, {
-    _id: new ObjectId(),
-    name: "Teddy Bridgewater"
-}]
 
 beforeEach((done) => {
     Person.remove({}).then(() => {

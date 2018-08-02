@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { people } from "./person_test_objects";
+import { people } from "./person_mock";
 
 // TODO: Maybe change to classes?
 export const open_poll_id = new ObjectId();
