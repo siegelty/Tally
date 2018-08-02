@@ -193,4 +193,20 @@ describe('POST /polls/vote', () => {
             })
             .end(done)
     })
+
+    it('Should fail as it doesn\'t include a poll', (done) => {
+        const vote_package = {
+            person: new ObjectId(),
+            option: open_poll.options[0]._id
+        }
+        
+        request(app)
+            .post('/poll/vote')
+            .send(vote_package)
+            .expect(400)
+            .expect((res) => {
+                expect(res.body.message).toBe("No Poll Specified")
+            })
+            .end(done)
+    })
 })
