@@ -33,16 +33,16 @@ describe('POST /person/new', () => {
             .send({name: sheaDaddy})
             .expect(200)
             .expect((res) => {
-                expect(res.body.name).toBe(sheaDaddy)
+                expect(res.body.person.name).toBe(sheaDaddy)
             })
             .end((err, res) => {
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
 
-                Person.find({name: sheaDaddy}).then((person) => {
-                    expect(person.length).toBe(1)
-                    expect(person[0]['name']).toBe(sheaDaddy)
+                Person.findOne({name: sheaDaddy}).then((person) => {
+                    // expect(person.length).toBe(1)
+                    expect(person['name']).toBe(sheaDaddy)
                     done()
                 }).catch((err) => done(err))
             })
@@ -58,8 +58,8 @@ describe('POST /person/new', () => {
                     return done(err);
                 }
 
-                Person.find({}).then((people) => {
-                    expect(people.length).toBe(2)
+                Person.find({}).then((db_people) => {
+                    expect(db_people.length).toBe(2)
                     done()
                 }).catch((err) => done(err))
             })

@@ -173,7 +173,39 @@ describe('GET /poll', () => {
 })
 
 describe('POST /polls/new', () => {
+    it("Should create a new poll and see the people added", (done) => {
+        const new_poll = {
+            prompt: "Who will win the natty",
+            options: [
+                {prompt: "Michigan"},
+                {prompt: "UofM"},
+                {prompt: "Bama"}
+            ]
+        }
 
+        request(app)
+            .post('/polls/new')
+            .send(new_poll)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.poll.options.length).toBe(new_poll.options.length)
+                expect(res.body.poll.undecided.length).toBe(people.length)
+                expect(res.body.poll.prompt).toBe(new_poll.prompt)
+                expect(res.body.poll._id).toBeDefined();
+            })
+            .end((err, res) =>  {
+                if (err) {
+                    return done(err)
+                }
+
+                Poll.findOne({_id: res.body.poll._id}).then((db_poll) => {
+                    expect(db_poll['options'].length).toBe(new_poll.options.length)
+                    expect(db_poll['undecided'].length).toBe(people.length)
+                    expect(db_poll['prompt']).toBe(new_poll.prompt)
+                    done()
+                }).catch(err => done(err))
+            })
+    })
 })
 
 describe('POST /polls/vote', () => {

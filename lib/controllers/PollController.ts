@@ -21,7 +21,7 @@ export class PollController {
             return newPoll.save();
         })
         .then((poll) => {
-            res.json(poll);
+            res.json({poll: poll});
         })
         .catch((err) => {
             res.send(err);

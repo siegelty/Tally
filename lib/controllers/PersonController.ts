@@ -12,6 +12,7 @@ export class PersonController {
         getPeople()
         .then((people) => {
             res.json({people: people});
+            return;
         })
         .catch((err) =>{
             res.send(err)
@@ -24,9 +25,10 @@ export class PersonController {
         newPerson.save((err, person) => {
             if (err) {
                 res.status(400).send(err); 
+                return; 
             }
 
-            res.json(person);
+            res.json({person: person});
         })
     }
 }
