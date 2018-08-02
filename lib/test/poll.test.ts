@@ -6,7 +6,9 @@ import { ObjectId } from "mongodb";
 import app from "../App"
 import { PollSchema } from '../models/PollModel';
 import { PersonSchema } from '../models/PersonModel';
-import { polls, people, open_poll_id, closed_poll_id, closed_poll, halfway_poll_id, halfway_poll } from './test_models';
+import { people } from './person_test_objects';
+import { open_poll_id, closed_poll_id, closed_poll, halfway_poll_id, halfway_poll, polls } from './poll_test_objects';
+
 
 const Poll = mongoose.model('Poll', PollSchema);
 const Person = mongoose.model('Person', PersonSchema);

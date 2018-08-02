@@ -1,12 +1,5 @@
 import { ObjectId } from "mongodb";
-
-export const people = [{
-    _id: new ObjectId(),
-    name: "Sam Darnold"
-}, {
-    _id: new ObjectId(),
-    name: "Teddy Bridgewater"
-}]
+import { people } from "./person_test_objects";
 
 // TODO: Maybe change to classes?
 export const open_poll_id = new ObjectId();
@@ -74,4 +67,3 @@ export const halfway_poll = {
 }
 
 export const polls = [open_poll, closed_poll, halfway_poll]
-
