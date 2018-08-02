@@ -4,86 +4,12 @@ import * as mongoose from 'mongoose';
 import { ObjectId } from "mongodb";
 
 import app from "../App"
-
-import { PollSchema } from "../models/PollModel";
+import { PollSchema } from '../models/PollModel';
 import { PersonSchema } from '../models/PersonModel';
+import { polls, people, open_poll_id, closed_poll_id, closed_poll, halfway_poll_id, halfway_poll } from './test_models';
 
 const Poll = mongoose.model('Poll', PollSchema);
 const Person = mongoose.model('Person', PersonSchema);
-
-const people = [{
-    _id: new ObjectId(),
-    name: "Sam Darnold"
-}, {
-    _id: new ObjectId(),
-    name: "Teddy Bridgewater"
-}]
-
-const open_poll_id = new ObjectId();
-const closed_poll_id = new ObjectId();
-const halfway_poll_id = new ObjectId();
-
-const open_poll = {
-    _id: open_poll_id,
-    undecided: people.map(person => person._id),
-    status: "OPEN",
-    prompt: "Who is gonna be GOAT?",
-    options: [{
-        _id: new ObjectId(),
-        prompt: "Tom Brady",
-        supporters: []
-    },{
-        _id: new ObjectId(),
-        prompt: "Sam Darnold",
-        supporters: []
-    },{
-        _id: new ObjectId(),
-        prompt: "Shea Patterson",
-        supporters: []
-    }]
-}
-
-const closed_poll = {
-    _id: closed_poll_id,
-    undecided: [],
-    status: "CLOSED",
-    prompt: "Who is gonna be GOAT?",
-    options: [{
-        _id: new ObjectId(),
-        prompt: "Tom Brady",
-        supporters: [people[0]._id]
-    },{
-        _id: new ObjectId(),
-        prompt: "Sam Darnold",
-        supporters: [people[1]._id]
-    },{
-        _id: new ObjectId(),
-        prompt: "Shea Patterson",
-        supporters: []
-    }]
-}
-
-const halfway_poll = {
-    _id: halfway_poll_id,
-    undecided: [people[0]._id],
-    status: "OPEN",
-    prompt: "Who is gonna be GOAT?",
-    options: [{
-        _id: new ObjectId(),
-        prompt: "Tom Brady",
-        supporters: [people[1]._id]
-    },{
-        _id: new ObjectId(),
-        prompt: "Sam Darnold",
-        supporters: []
-    },{
-        _id: new ObjectId(),
-        prompt: "Shea Patterson",
-        supporters: []
-    }]
-}
-
-const polls = [open_poll, closed_poll, halfway_poll]
 
 beforeEach((done) => {
     Poll.remove({}).then(() => {
