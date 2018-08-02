@@ -24,7 +24,7 @@ export function getPeople(): Promise<any> {
 
 export function getPerson(person_id): Promise<any> {
     return new Promise((resolve, reject) => {
-        Person.find({_id: new ObjectId(person_id)}, (err, person) => {
+        Person.findOne({_id: new ObjectId(person_id)}, (err, person) => {
             if (err) {
                 reject(err);
                 return;

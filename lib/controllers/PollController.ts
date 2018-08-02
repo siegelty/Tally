@@ -32,10 +32,10 @@ export class PollController {
     public getPolls(req: Request, res: Response) {
         getPolls()
         .then((polls) => {
-            res.json(polls);
+            res.json({polls: polls});
         })
         .catch((err) => {
-            res.send(err);
+            res.status(400).send(err);
         })
     }
 
@@ -72,8 +72,6 @@ export class PollController {
 
     public getPollStatus(req: Request, res: Response) {
         const body = {...req.body, ...{poll: req.query.poll}};
-        console.log(body)
-
         // Get Poll
         getPoll(body.poll)
         // Figure out to 1) display results or 2) unvoted
@@ -88,10 +86,10 @@ export class PollController {
             }
         })
         .then((poll) => {
-            res.json(poll);
+            res.json({poll: poll});
         })
         .catch((err) => {
-            res.send(err);
+            res.status(400).send(err);
         })
     }
 

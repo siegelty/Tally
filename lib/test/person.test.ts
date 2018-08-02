@@ -15,13 +15,13 @@ const people = [{
     name: "Sam Darnold"
 }, {
     _id: new ObjectId(),
-    name: "Teddy Brdigewater"
+    name: "Teddy Bridgewater"
 }]
 
 beforeEach((done) => {
-    Person.remove({}).then((() => {
+    Person.remove({}).then(() => {
         return Person.insertMany(people);
-    })).then(() => done());
+    }).then(() => done());
 })
 
 describe('POST /person/new', () => {

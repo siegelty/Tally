@@ -25,7 +25,7 @@ export const PollSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['OPEN', 'CLOSE'],
+        enum: ['OPEN', 'CLOSED'],
         default: 'OPEN'
     }
 })

@@ -60,11 +60,15 @@ export function preparePollWithUnvoted(poll): Promise<any> {
         // TODO: Resolve if this is still the best way
         Promise.all(undecidedPromises)
         .then((undecided) => {
-            console.log(undecided)
             const derived_poll = {
                 status: poll.status,
                 _id: poll._id,
-                undecided: undecided
+                undecided: undecided.map((person) => {
+                    return {
+                        _id: person._id,
+                        name: person.name
+                    }
+                })
             }
     
             resolve(derived_poll)
