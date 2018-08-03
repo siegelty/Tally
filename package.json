@@ -8,7 +8,7 @@
     "dev": "ts-node ./lib/index.ts",
     "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha --exit -r ts-node/register lib/**/*.test.ts",
     "test-watch": "nodemon --exec npm run test",
-    "start": "nodemon",
+    "start": "nodemon --exec npm run dev",
     "prod": "npm run build && npm run start"
   },
   "author": "Tyler Siegel",
