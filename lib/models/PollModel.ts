@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { OptionSchema } from './OptionModel';
+import { poll_statuses_array, poll_statuses } from '../types/poll_statuses';
 
 const Schema = mongoose.Schema;
 
@@ -25,7 +26,7 @@ export const PollSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['OPEN', 'CLOSE'],
-        default: 'OPEN'
+        enum: poll_statuses_array,
+        default: poll_statuses.OPEN
     }
 })

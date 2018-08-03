@@ -1,3 +1,5 @@
+require('../config/config')
+
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import { RouteManager } from './routes/RouteManager'
@@ -6,7 +8,7 @@ import * as mongoose from 'mongoose'
 class App {
     public app: express.Application;
     public routeManager: RouteManager = new RouteManager();
-    public mongoURL: string = 'mongodb://localhost:27017/CRMdb'
+    public mongoURL: string = process.env.MONGODB_URI;
 
     constructor() {
         this.app = express()
