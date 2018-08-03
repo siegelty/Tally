@@ -1,10 +1,12 @@
 langauge: node_js
 node_js: 
-  - "stable"
+  - "8.11.3"
+services:
+  - "mongodb"
 script:
-  - npm run test
+  - "npm run test"
 install:
-  - npm install 
+  - "npm install"
 cache:
   directories:
     - "node_modules"
