@@ -1,8 +1,10 @@
 langauge: node_js
 node_js: 
   - "stable"
+script:
+  - npm run test
+install:
+  - npm install 
 cache:
   directories:
     - "node_modules"
-script:
-  - npm run test
