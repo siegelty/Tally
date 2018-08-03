@@ -1,6 +1,8 @@
 # Tally
 An API to facilitated accountatble and anonymous voting
 
+[![Build Status](https://travis-ci.com/siegelty/Tally.svg?branch=master)](https://travis-ci.com/siegelty/Tally)
+
 ## To Run
 * Run `npm install` to install dependencies
 
